@@ -8,27 +8,28 @@ td.setAttribute('colspan', 2);
 tr.append(td);
 output.append(tr);
  
+const getRandomTime = () => Math.floor(Math.random() * 3 + 1) * 1000;
+
 const p1 = new Promise((resolve) => {
-	let delay = 2000;
-	setTimeout(() => {
-		resolve(['Promise 1', delay]);
-	}, delay);
+  let delay = getRandomTime();
+  setTimeout(() => {
+    resolve(['Promise 1', delay]);
+  }, delay);
 })
- 
+
 const p2 = new Promise((resolve) => {
-	let delay = 1000;
-	setTimeout(() => {
-		resolve(['Promise 2', delay]);
-	}, delay);
+  let delay = getRandomTime();
+  setTimeout(() => {
+    resolve(['Promise 2', delay]);
+  }, delay);
 })
- 
+
 const p3 = new Promise((resolve) => {
-	let delay = 3000;
-	setTimeout(() => {
-		resolve(['Promise 3', delay]);
-	}, delay);
+  let delay = getRandomTime();
+  setTimeout(() => {
+    resolve(['Promise 3', delay]);
+  }, delay);
 })
- 
 let promiseArr = [p1, p2, p3];
 Promise.all(promiseArr)
 .then((res) => {
