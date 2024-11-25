@@ -28,8 +28,6 @@ Promise.all(allPromises)
 .then((res) => {
 	modifyTable(res);
 })
-
-
 function modifyTable(data) {
 	output.innerHTML = null;
 	let totalTime = 0;
