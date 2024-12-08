@@ -12,7 +12,7 @@ function createPromise() {
 	return new Promise((resolve) => {
 		let delay = Math.floor(Math.random()*2000) + 1000;
 		setTimeout(() => {
-			resolve({name:'Promise 1', timeTaken:delay});
+			resolve({name:`Promise ${i+1}`, timeTaken:delay});
 		}, delay);
 	})
 }
