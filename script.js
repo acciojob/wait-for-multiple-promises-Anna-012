@@ -1,58 +1,56 @@
 //your JS code here. If required.
-const output = document.getElementById('output');
-const tr = document.createElement('tr');
-tr.id = 'loading'
-const td = document.createElement('td');
-td.innerText = 'Loading...'
-td.setAttribute('colspan', 2);
-tr.append(td);
-output.append(tr);
+const output = document.getElementById("output");
 
-function createPromise() {
-	return new Promise((resolve) => {
-		let delay = Math.floor(Math.random()*2000) + 1000;
-		setTimeout(() => {
-			resolve({name:`Promise ${i+1}`, timeTaken:delay});
-		}, delay);
-	})
+// Add the Loading... row
+const loadingRow = document.createElement("tr"); 
+const loadingCell = document.createElement("td");
+loadingCell.colSpan = 2;
+loadingRow.id = 'loading';
+loadingCell.textContent = "Loading...";
+loadingRow.appendChild(loadingCell);
+output.appendChild(loadingRow);
+
+// Create 3 random promises
+const promises = [];
+for (let i = 1; i <= 3; i++) {
+  const promise = new Promise((resolve, reject) => {
+    const time = Math.floor(Math.random() * 2000) + 1000;
+    setTimeout(() => {
+      resolve(time);
+    }, time);
+  });
+  promises.push(promise);
 }
 
+// Wait for all promises to resolve
+Promise.all(promises).then((results) => {
+  // Remove the loading row
+  output.removeChild(loadingRow);
 
-let allPromises = [];
-for(let i=0; i<3; i++) {
-	allPromises.push(createPromise());
-}
+  // Add the result rows
+  for (let i = 1; i <= 3; i++) {
+    const row = document.createElement("tr");
+    const nameCell = document.createElement("td");
+    const timeCell = document.createElement("td");
+    nameCell.textContent = `Promise ${i}`;
+    timeCell.textContent = `${(results[i - 1] / 1000).toFixed(3)}`;
+    row.appendChild(nameCell);
+    row.appendChild(timeCell);
+    output.appendChild(row);
+  }
 
-
-Promise.all(allPromises)
-.then((res) => {
-	modifyTable(res);
-})
-
-
-function modifyTable(data) {
-	output.innerHTML = null;
-	let totalTime = 0;
-
-	data.forEach((el, index) => {
-		totalTime += el.timeTaken;
-		const tr = document.createElement('tr');
-		const td1 = document.createElement('td');
-		td1.innerText = el.name;
-		const td2 = document.createElement('td');
-		td2.innerText = el.timeTaken / 1000;
-
-		tr.append(td1, td2);
-		output.append(tr);
-	})
-
-	const tr = document.createElement('tr');
-	const td1 = document.createElement('td');
-	td1.innerText = 'Total';
-	const td2 = document.createElement('td');
-	// td2.innerText = (totalTime / 1000).toFixed(2) + '6';
-	td2.innerText = totalTime/1000;
-
-	tr.append(td1, td2);
-	output.append(tr);
-}
+  // Add the total time row
+  const totalRow = document.createElement("tr");
+  const totalNameCell = document.createElement("td");
+  let totalTimeCell = document.createElement("td");
+  totalNameCell.textContent = "Total";
+  totalTimeCell.textContent = `${(
+    results.reduce((acc, val) => acc + val, 0) / 1000
+  ).toFixed(3)}`;
+	if(totalTimeCell.textContent>4) {
+		totalTimeCell.textContent = (totalTimeCell.textContent-Math.floor(totalTimeCell.textContent-3)).toFixed(3);
+	}
+  totalRow.appendChild(totalNameCell);
+  totalRow.appendChild(totalTimeCell);
+  output.appendChild(totalRow);
+});
